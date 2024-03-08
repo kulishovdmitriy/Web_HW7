@@ -39,18 +39,10 @@ class Subject(Base):
 class Grade(Base):
     __tablename__ = 'grades'
     id = Column(Integer, primary_key=True)
-    student_id = Column('student_id', ForeignKey('students.id'))
-    subject_id = Column('subject_id', ForeignKey('subjects.id'))
+    student_id = Column('student_id', ForeignKey('students.id', ondelete='CASCADE'))
+    subject_id = Column('subject_id', ForeignKey('subjects.id', ondelete='CASCADE'))
     grade = Column(Integer, CheckConstraint('grade >= 0 AND grade <= 100'), nullable=False)
     date = Column(Date, nullable=True)
     student = relationship("Student", back_populates="grades")
     subject = relationship("Subject", back_populates="grades")
 
-
-class Discipline(Base):
-    __tablename__ = 'disciplines'
-    id = Column(Integer, primary_key=True)
-    student_id = Column(Integer, ForeignKey('students.id'))
-    subject_id = Column(Integer, ForeignKey('subjects.id'))
-    student = relationship("Student")
-    subject = relationship("Subject")
