@@ -18,21 +18,4 @@ URI = f"postgresql://{user}:{password}@{domain}:{port}/{db_name}"
 
 engine = create_engine(URI, echo=False, pool_size=4, max_overflow=0)
 DBSession = sessionmaker(bind=engine)
-session = DBSession
-
-
-
-
-# import psycopg2
-#
-# from contextlib import contextmanager
-#
-#
-# @contextmanager
-# def connect():
-#     try:
-#         conn = psycopg2.connect(host="localhost", database="my_db", user="myuser", password="123456789")
-#         yield conn
-#         conn.close()
-#     except psycopg2.OperationalError as err:
-#         raise RuntimeError(f"Failed to create database connection: {err}")
+session = DBSession()

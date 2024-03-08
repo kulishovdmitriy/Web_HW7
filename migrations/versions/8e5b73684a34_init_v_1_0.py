@@ -1,8 +1,8 @@
-"""Init
+"""Init v. 1.0
 
-Revision ID: a7e6035eb7d6
+Revision ID: 8e5b73684a34
 Revises: 
-Create Date: 2024-03-07 20:28:11.725429
+Create Date: 2024-03-08 19:14:02.343896
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'a7e6035eb7d6'
+revision: str = '8e5b73684a34'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -27,19 +27,19 @@ def upgrade() -> None:
     )
     op.create_table('teachers',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('fullname', sa.String(length=155), nullable=False),
+    sa.Column('fullname', sa.String(length=150), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('students',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('fullname', sa.String(length=155), nullable=False),
+    sa.Column('fullname', sa.String(length=150), nullable=False),
     sa.Column('group_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['group_id'], ['groups.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('subjects',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=155), nullable=False),
+    sa.Column('name', sa.String(length=150), nullable=False),
     sa.Column('teacher_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['teacher_id'], ['teachers.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
@@ -47,17 +47,19 @@ def upgrade() -> None:
     op.create_table('disciplines',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('student_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['student_id'], ['students.id'], ondelete='CASCADE'),
+    sa.Column('subject_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['student_id'], ['students.id'], ),
+    sa.ForeignKeyConstraint(['subject_id'], ['subjects.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('grades',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('grade', sa.Integer(), nullable=False),
-    sa.Column('data_of', sa.Date(), nullable=True),
     sa.Column('student_id', sa.Integer(), nullable=True),
     sa.Column('subject_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['student_id'], ['students.id'], ondelete='CASCADE'),
-    sa.ForeignKeyConstraint(['subject_id'], ['subjects.id'], ondelete='CASCADE'),
+    sa.Column('grade', sa.Integer(), nullable=False),
+    sa.Column('date', sa.Date(), nullable=True),
+    sa.ForeignKeyConstraint(['student_id'], ['students.id'], ),
+    sa.ForeignKeyConstraint(['subject_id'], ['subjects.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
